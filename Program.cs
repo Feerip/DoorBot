@@ -20,7 +20,8 @@ namespace InteractionFramework
         {
 
             DoorAuth db = DoorAuth.GetDoorAuth();
-            //DoorControl door = DoorControl.GetDoorControl();
+            DoorControl door = DoorControl.GetDoorControl();
+
             
             // One of the more flexable ways to access the configuration data is to use the Microsoft's Configuration model,
             // this way we can avoid hard coding the environment secrets. I opted to use the Json and environment variable providers here.
@@ -29,6 +30,7 @@ namespace InteractionFramework
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
+            door.CheckLoop().GetAwaiter().GetResult();
             BotRunAsync(config).GetAwaiter().GetResult();
         }
 
