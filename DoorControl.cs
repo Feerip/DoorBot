@@ -122,6 +122,7 @@ namespace DoorBot
                     else
                     {
                         BadBeep();
+                        Thread.Sleep(2000);
                     }    
                 }
             }
@@ -167,9 +168,9 @@ namespace DoorBot
 
             GoodBeep();
             Thread.Sleep(7000);
-            LockBeep();
 
             // Lock it down again 
+            LockBeep();
             controller.Write(LOCK_SIGNAL, PinValue.Low);
         }
 
