@@ -42,7 +42,7 @@ namespace DoorBot
         Pn532 pn532;
 
         int BUZZER = 17;
-        int GPIO_PIN = 23;
+        int LOCK_SIGNAL = 23;
 
         GpioController controller;
 
@@ -54,8 +54,8 @@ namespace DoorBot
 
             controller.OpenPin(BUZZER, PinMode.Output);
             Console.WriteLine($"GPIO pin enabled for Buzzer: {BUZZER}");
-            controller.OpenPin(GPIO_PIN, PinMode.Output);
-            Console.WriteLine($"GPIO pin enabled for door signal output: {GPIO_PIN}");
+            controller.OpenPin(LOCK_SIGNAL, PinMode.Output);
+            Console.WriteLine($"GPIO pin enabled for door signal output: {LOCK_SIGNAL}");
 
 
             if (pn532.FirmwareVersion is FirmwareVersion version)
@@ -117,10 +117,7 @@ namespace DoorBot
 
                     if (doorAuth.UserAuthorized(id))
                     {
-                        GoodBeep();
                         OpenDoor();
-                        Thread.Sleep(7000);
-                        LockBeep();
                     }
                     else
                     {
@@ -165,7 +162,16 @@ namespace DoorBot
 
         public void OpenDoor()
         {
-            // SEND SIGNAL TO OPEN DOOR
+            // Open it up
+            controller.Write(LOCK_SIGNAL, PinValue.High);
+
+            GoodBeep();
+            OpenDoor();
+            Thread.Sleep(7000);
+            LockBeep();
+
+            // Lock it down again 
+            controller.Write(LOCK_SIGNAL, PinValue.Low);
         }
 
         public async Task CheckLoop()
