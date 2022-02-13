@@ -99,6 +99,7 @@ namespace DoorBot
         public bool UserAuthorized(string id)
         {
             string processedID = id.Replace("-", "");
+            Console.WriteLine(processedID);
             bool found = false;
             foreach (List<string> row in _database)
             {
