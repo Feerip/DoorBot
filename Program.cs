@@ -30,7 +30,7 @@ namespace InteractionFramework
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
-            door.CheckLoop().GetAwaiter().GetResult();
+            door.CheckLoop();
             BotRunAsync(config).GetAwaiter().GetResult();
         }
 
