@@ -92,7 +92,7 @@ namespace DoorBot
                     retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
                     if (retData is object)
                     {
-                        CheckingBeep();
+                        //CheckingBeep();
                         break;
                     }
 
@@ -106,7 +106,7 @@ namespace DoorBot
                 }
                 else
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(100);
                 }
 
                 var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
