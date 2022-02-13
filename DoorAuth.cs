@@ -5,6 +5,8 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 
+using Microsoft.Extensions.Configuration;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,15 +35,25 @@ namespace DoorBot
         private readonly string[] _scopes = { SheetsService.Scope.Spreadsheets };
 
         private readonly string _credentialsFile = "Config/doorbot-credentials.json";
-        private readonly string _spreadsheetID = "1krDSpD1EJb380O-23KJJh-XECVH8vz20iLH0N4TN0l0";
-        private readonly string _dataRange = "Authorized Users!A2:D";
+        private readonly string _spreadsheetID;
+        private readonly string _dataRange;
 
         private List<List<string>> _database = new();
 
+        IConfiguration _configuration;
 
 
         private DoorAuth()
         {
+
+            _configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables(prefix: "DC_")
+                .AddJsonFile("Config/config.json", optional: true)
+                .Build();
+
+            _spreadsheetID = _configuration.GetValue<string>("spreadsheetID");
+            _dataRange = _configuration.GetValue<string>("dataRange");
+
             _credentials = GoogleCredential.FromFile(_credentialsFile).CreateScoped(_scopes);
             _service = new SheetsService(new()
             {
@@ -51,7 +63,7 @@ namespace DoorBot
 
             RefreshDB();
         }
-        
+
         public static DoorAuth GetDoorAuth()
         {
             return _instance;
