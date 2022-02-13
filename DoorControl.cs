@@ -106,7 +106,7 @@ namespace DoorBot
                 }
                 else
                 {
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
                 }
 
                 var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
