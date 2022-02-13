@@ -30,8 +30,9 @@ namespace InteractionFramework
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
-            door.CheckLoop();
+
             BotRunAsync(config).GetAwaiter().GetResult();
+            door.CheckLoop();
         }
 
         static async Task BotRunAsync(IConfiguration configuration)
