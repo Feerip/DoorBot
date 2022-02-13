@@ -16,7 +16,7 @@ namespace InteractionFramework
     class Program
     {
         // Entry point of the program.
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
 
             DoorAuth db = DoorAuth.GetDoorAuth();
@@ -30,9 +30,11 @@ namespace InteractionFramework
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
+            Task bott = BotRunAsync(config);
+            Task doort = door.CheckLoop();
 
-            //BotRunAsync(config).GetAwaiter().GetResult();
-            door.CheckLoop().GetAwaiter().GetResult();
+            await Task.WhenAll(bott, doort);
+
         }
 
         static async Task BotRunAsync(IConfiguration configuration)
