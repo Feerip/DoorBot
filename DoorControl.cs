@@ -163,14 +163,14 @@ namespace DoorBot
         public void OpenDoor()
         {
             // Open it up
-            controller.Write(LOCK_SIGNAL, PinValue.High);
+            //controller.Write(LOCK_SIGNAL, PinValue.High);
 
             GoodBeep();
             Thread.Sleep(7000);
             LockBeep();
 
             // Lock it down again 
-            controller.Write(LOCK_SIGNAL, PinValue.Low);
+            //controller.Write(LOCK_SIGNAL, PinValue.Low);
         }
 
         public async Task CheckLoop()
