@@ -29,6 +29,9 @@ namespace DoorBot
         private readonly int KEY_TYPE = 2;
         private readonly int COLOR = 3;
 
+        private readonly int DATE = 4;
+        private readonly int ACCESS_GRANTED = 5;
+
         private readonly SheetsService _service;
         private readonly GoogleCredential _credentials;
 
@@ -36,7 +39,8 @@ namespace DoorBot
 
         private readonly string _credentialsFile = "Config/doorbot-credentials.json";
         private readonly string _spreadsheetID;
-        private readonly string _dataRange;
+        private readonly string _authorizedUsersRange;
+        private readonly string _accessLogRange;
 
         private List<List<string>> _database = new();
 
@@ -52,7 +56,8 @@ namespace DoorBot
                 .Build();
 
             _spreadsheetID = _configuration.GetValue<string>("spreadsheetID");
-            _dataRange = _configuration.GetValue<string>("dataRange");
+            _authorizedUsersRange = _configuration.GetValue<string>("authorizedUsersRange");
+            _accessLogRange = _configuration.GetValue<string>("accessLogRange");
 
             _credentials = GoogleCredential.FromFile(_credentialsFile).CreateScoped(_scopes);
             _service = new SheetsService(new()
@@ -73,7 +78,7 @@ namespace DoorBot
         {
             List<List<string>> output = new();
 
-            SpreadsheetsResource.ValuesResource.GetRequest request = _service.Spreadsheets.Values.Get(_spreadsheetID, _dataRange);
+            SpreadsheetsResource.ValuesResource.GetRequest request = _service.Spreadsheets.Values.Get(_spreadsheetID, _authorizedUsersRange);
             ValueRange response = request.Execute();
 
             IList<IList<object>> values = response.Values;
@@ -98,20 +103,62 @@ namespace DoorBot
             return Task.CompletedTask;
         }
 
-        public bool UserAuthorized(string id)
+        public string[]? GetAuthorizedUser(string id)
         {
             string processedID = id.Replace("-", "");
             //Console.WriteLine(processedID);
-            bool found = false;
+            string[] user = new string[4];
             foreach (List<string> row in _database)
             {
-                if (row[0].Equals(processedID, StringComparison.OrdinalIgnoreCase))
+                if (row[ID].Equals(processedID, StringComparison.OrdinalIgnoreCase))
                 {
-                    found = true;
-                    break;
+                    user[ID] = row[ID];
+                    user[NAME] = row[NAME];
+                    user[KEY_TYPE] = row[KEY_TYPE];
+                    user[COLOR] = row[COLOR];
+                    return user;
                 }
             }
-            return found;
+            return null;
+        }
+        public Task AddToLog(string id, string? name, string? keyType, string? color, bool accessGranted)
+        {
+            List<IList<object>> newEntries = new();
+            List<object> rowToAppend = new();
+
+            rowToAppend.Add(id);
+            if (string.IsNullOrEmpty(name))
+            {
+                rowToAppend.Add("");
+                rowToAppend.Add("");
+                rowToAppend.Add("");
+            }
+            else
+            {
+                rowToAppend.Add(name);
+                rowToAppend.Add(keyType);
+                rowToAppend.Add(color);
+            }
+            rowToAppend.Add(DateTime.Now.ToString());
+            rowToAppend.Add(accessGranted.ToString());
+
+            newEntries.Add(rowToAppend);
+
+            // Done adding stuff, time to send it off
+
+            ValueRange requestBody = new();
+            requestBody.Values = newEntries;
+
+            SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum VIO = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.RAW;
+            SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum IDO = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
+
+            SpreadsheetsResource.ValuesResource.AppendRequest request = _service.Spreadsheets.Values.Append(requestBody, _spreadsheetID, _accessLogRange);
+            request.ValueInputOption = VIO;
+            request.InsertDataOption = IDO;
+
+            Data.AppendValuesResponse response = request.Execute();
+
+            return Task.CompletedTask;
         }
 
         //        private FruitPantry()

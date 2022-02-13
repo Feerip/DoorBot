@@ -115,9 +115,12 @@ namespace DoorBot
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
                     //Console.WriteLine(id);
 
-                    if (doorAuth.UserAuthorized(id))
+                    string[]? user = doorAuth.GetAuthorizedUser(id);
+                    if (user is not null)
                     {
                         OpenDoor();
+                        // Fire off the log entry and move on without waiting
+                        Task log = doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
                     }
                     else
                     {
@@ -129,6 +132,8 @@ namespace DoorBot
                         Thread.Sleep(2000);
                         // If the refresh isn't done yet, wait until it is.
                         await Task.WhenAll(refresh);
+                        // Fire off the log entry and move on without waiting
+                        Task log = doorAuth.AddToLog(id, null, null, null, false);
                     }    
                 }
             }
