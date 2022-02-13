@@ -31,8 +31,8 @@ namespace InteractionFramework
                 .Build();
 
 
-            BotRunAsync(config).GetAwaiter().GetResult();
-            door.CheckLoop();
+            //BotRunAsync(config).GetAwaiter().GetResult();
+            door.CheckLoop().GetAwaiter().GetResult();
         }
 
         static async Task BotRunAsync(IConfiguration configuration)
