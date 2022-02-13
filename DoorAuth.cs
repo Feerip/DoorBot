@@ -105,12 +105,11 @@ namespace DoorBot
 
         public string[]? GetAuthorizedUser(string id)
         {
-            string processedID = id.Replace("-", "");
             //Console.WriteLine(processedID);
             string[] user = new string[4];
             foreach (List<string> row in _database)
             {
-                if (row[ID].Equals(processedID, StringComparison.OrdinalIgnoreCase))
+                if (row[ID].Equals(id, StringComparison.OrdinalIgnoreCase))
                 {
                     user[ID] = row[ID];
                     user[NAME] = row[NAME];

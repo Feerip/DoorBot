@@ -113,17 +113,26 @@ namespace DoorBot
                 if (decrypted is object)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
-                    //Console.WriteLine(id);
+                    // Sanitize the input from pn532 by removing -'s
+                    string processedID = id.Replace("-", "");
+                    
+                    // Get authorization
+                    string[]? user = doorAuth.GetAuthorizedUser(processedID);
 
-                    string[]? user = doorAuth.GetAuthorizedUser(id);
+                    // If authorized
                     if (user is not null)
                     {
-                        OpenDoor();
                         // Fire off the log entry and move on without waiting
                         Task log = doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
+
+                        OpenDoor();
                     }
+                    // If not
                     else
                     {
+                        // Fire off the log entry and move on without waiting
+                        Task log = doorAuth.AddToLog(processedID, null, null, null, false);
+
                         BadBeep();
 
                         // Fires off an async RefreshDB
@@ -132,8 +141,6 @@ namespace DoorBot
                         Thread.Sleep(2000);
                         // If the refresh isn't done yet, wait until it is.
                         await Task.WhenAll(refresh);
-                        // Fire off the log entry and move on without waiting
-                        Task log = doorAuth.AddToLog(id, null, null, null, false);
                     }    
                 }
             }
