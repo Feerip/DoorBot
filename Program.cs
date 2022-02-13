@@ -16,7 +16,7 @@ namespace InteractionFramework
     class Program
     {
         // Entry point of the program.
-        static async void Main(string[] args)
+        static async Task Main(string[] args)
         {
 
             DoorAuth db = DoorAuth.GetDoorAuth();
