@@ -92,6 +92,7 @@ namespace DoorBot
                     retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
                     if (retData is object)
                     {
+                        CheckingBeep();
                         break;
                     }
 
