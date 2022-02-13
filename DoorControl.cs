@@ -113,12 +113,14 @@ namespace DoorBot
                 if (decrypted is object)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
-                    Console.WriteLine(id);
+                    //Console.WriteLine(id);
 
                     if (doorAuth.UserAuthorized(id))
                     {
                         GoodBeep();
                         OpenDoor();
+                        Thread.Sleep(7000);
+                        LockBeep();
                     }
                     else
                     {
