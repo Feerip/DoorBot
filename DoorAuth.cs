@@ -98,10 +98,11 @@ namespace DoorBot
 
         public bool UserAuthorized(string id)
         {
+            string processedID = id.Replace("-", "");
             bool found = false;
             foreach (List<string> row in _database)
             {
-                if (row[0].Equals(id, StringComparison.OrdinalIgnoreCase))
+                if (row[0].Equals(processedID, StringComparison.OrdinalIgnoreCase))
                 {
                     found = true;
                     break;
