@@ -112,7 +112,7 @@ namespace DoorBot
                 var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
                 if (decrypted is object)
                 {
-                    string id = $"NFCID: {BitConverter.ToString(decrypted.NfcId)}";
+                    string id = $"{BitConverter.ToString(decrypted.NfcId)}";
                     Console.WriteLine(id);
 
                     if (doorAuth.UserAuthorized(id))
