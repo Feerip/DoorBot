@@ -166,7 +166,6 @@ namespace DoorBot
             controller.Write(LOCK_SIGNAL, PinValue.High);
 
             GoodBeep();
-            OpenDoor();
             Thread.Sleep(7000);
             LockBeep();
 
