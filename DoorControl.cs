@@ -124,7 +124,7 @@ namespace DoorBot
                     {
                         // Fire off the log entry and move on without waiting
                         Task log = doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
-                        Console.WriteLine($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
+                        Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
 
                         OpenDoor();
                     }
@@ -133,7 +133,7 @@ namespace DoorBot
                     {
                         // Fire off the log entry and move on without waiting
                         Task log = doorAuth.AddToLog(processedID, null, null, null, false);
-                        Console.WriteLine($"Denied: {DateTime.Now} {processedID}");
+                        Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
 
                         BadBeep();
 
