@@ -69,7 +69,7 @@ namespace DoorBot
             return _instance;
         }
 
-        public void RefreshDB()
+        public Task RefreshDB()
         {
             List<List<string>> output = new();
 
@@ -94,6 +94,8 @@ namespace DoorBot
                 }
             }
             _database = output;
+
+            return Task.CompletedTask;
         }
 
         public bool UserAuthorized(string id)

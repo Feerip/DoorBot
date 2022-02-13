@@ -82,7 +82,7 @@ namespace DoorBot
                 Console.WriteLine($"Error");
             }
         }
-        private void ReadMiFare(Pn532 pn532)
+        private async void ReadMiFare(Pn532 pn532)
         {
             while (true)
             {
@@ -122,7 +122,13 @@ namespace DoorBot
                     else
                     {
                         BadBeep();
+
+                        // Fires off an async RefreshDB
+                        Task refresh = doorAuth.RefreshDB();
+                        // Timeout of 2.0s when card failed
                         Thread.Sleep(2000);
+                        // If the refresh isn't done yet, wait until it is.
+                        await Task.WhenAll(refresh);
                     }    
                 }
             }
@@ -174,7 +180,7 @@ namespace DoorBot
             controller.Write(LOCK_SIGNAL, PinValue.Low);
         }
 
-        public async Task CheckLoop()
+        public Task CheckLoop()
         {
             while (true)
             {
