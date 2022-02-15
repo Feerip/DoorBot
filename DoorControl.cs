@@ -87,14 +87,14 @@ namespace DoorBot
             while (true)
             {
                 byte[]? retData = null;
-                while ((!Console.KeyAvailable))
+                while (/*(!Console.KeyAvailable)*/ true)
                 {
                     retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
                     if (retData is object)
                     {
                         //CheckingBeep();
-                        break;
                         Console.WriteLine("Found MiFare");
+                        break;
                     }
 
                     // Give time to PN532 to process
