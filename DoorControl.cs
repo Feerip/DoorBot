@@ -89,7 +89,7 @@ namespace DoorBot
                 byte[]? retData = null;
                 while (/*(!Console.KeyAvailable)*/ true)
                 {
-                    PollingType[] type = new PollingType[1] { PollingType.GenericPassive106kbps };
+                    PollingType[] type = new PollingType[1] { PollingType.MifareCard };
                     retData = pn532.AutoPoll(0xFF, 200, type);
                     //retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
 
@@ -119,7 +119,7 @@ namespace DoorBot
                     //Thread.Sleep(100);
                 }
 
-                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan()/*.Slice(1)*/);
+                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
                 if (decrypted is object)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
