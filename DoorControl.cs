@@ -92,6 +92,11 @@ namespace DoorBot
                     PollingType[] type = new PollingType[1] { PollingType.GenericPassive106kbps };
                     retData = pn532.AutoPoll(0x01, 100, type);
                     //retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
+
+                    if (retData is not null)
+                    {
+                        CheckingBeep();
+                    }
                     if (retData is object)
                     {
                         //CheckingBeep();
