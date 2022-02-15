@@ -123,7 +123,7 @@ namespace DoorBot
                 if (decrypted is object)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
-                    Console.WriteLine($"{decrypted.NfcId} - {decrypted.Sak} - {decrypted.Atqa} - {decrypted.Ats}");
+                    Console.WriteLine($"{BitConverter.ToString(decrypted.NfcId)} - {decrypted.Sak} - {decrypted.Atqa} - {BitConverter.ToString(decrypted.Ats)}");
                     // Sanitize the input from pn532 by removing -'s
                     string processedID = id.Replace("-", "");
                     
