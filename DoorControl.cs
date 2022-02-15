@@ -89,7 +89,7 @@ namespace DoorBot
                 byte[]? retData = null;
                 while (/*(!Console.KeyAvailable)*/ true)
                 {
-                    PollingType[] type = new PollingType[1] { PollingType.MifareCard };
+                    PollingType[] type = new PollingType[1] { PollingType.Passive106kbpsISO144443_4A };
                     retData = pn532.AutoPoll(0xFF, 200, type);
                     //retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
 
