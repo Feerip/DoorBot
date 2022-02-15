@@ -105,7 +105,7 @@ namespace DoorBot
 
         public string[]? GetAuthorizedUser(string id)
         {
-            //Console.WriteLine(processedID);
+            Console.WriteLine(processedID);
             string[] user = new string[4];
             foreach (List<string> row in _database)
             {

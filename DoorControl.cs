@@ -127,7 +127,7 @@ namespace DoorBot
                         Task log = doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
 
                         OpenDoor();
-                        //Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
+                        Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
                     }
                     // If not
                     else
@@ -141,7 +141,7 @@ namespace DoorBot
                         Task refresh = doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed
                         Thread.Sleep(2000);
-                        //Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
+                        Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
                         // If the refresh isn't done yet, wait until it is.
                         await Task.WhenAll(refresh);
                     }    
