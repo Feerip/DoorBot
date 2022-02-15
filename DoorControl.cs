@@ -102,6 +102,7 @@ namespace DoorBot
 
                 if (retData is null)
                 {
+                    Console.WriteLine("HELP");
                     return;
                 }
                 else
