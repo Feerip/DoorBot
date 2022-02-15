@@ -206,7 +206,9 @@ namespace DoorBot
                     ReadMiFare(pn532);
                 }
                 catch (Exception ex)
-                { }
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 Console.WriteLine("End of Loop");
             }
