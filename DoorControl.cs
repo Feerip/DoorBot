@@ -119,10 +119,11 @@ namespace DoorBot
                     //Thread.Sleep(100);
                 }
 
-                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(2));
+                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
                 if (decrypted is object)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
+                    Console.WriteLine($"{decrypted.NfcId} - {decrypted.Sak} - {decrypted.Atqa} - {decrypted.Ats}");
                     // Sanitize the input from pn532 by removing -'s
                     string processedID = id.Replace("-", "");
                     
