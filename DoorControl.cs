@@ -90,12 +90,12 @@ namespace DoorBot
                 while (/*(!Console.KeyAvailable)*/ true)
                 {
                     PollingType[] type = new PollingType[1] { PollingType.GenericPassive106kbps };
-                    retData = pn532.AutoPoll(0x01, 100, type);
+                    retData = pn532.AutoPoll(0xFF, 200, type);
                     //retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
 
                     if (retData is not null)
                     {
-                        CheckingBeep();
+                        GoodBeep();
                     }
                     if (retData is object)
                     {
