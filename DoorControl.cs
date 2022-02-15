@@ -119,7 +119,7 @@ namespace DoorBot
                     //Thread.Sleep(100);
                 }
 
-                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
+                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(2));
                 if (decrypted is object)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
