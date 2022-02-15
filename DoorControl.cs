@@ -201,7 +201,13 @@ namespace DoorBot
         {
             while (true)
             {
-                ReadMiFare(pn532);
+                try
+                {
+                    ReadMiFare(pn532);
+                }
+                catch (Exception ex)
+                { }
+
                 Console.WriteLine("End of Loop");
             }
             Console.WriteLine("End of loop function (going to main)");
