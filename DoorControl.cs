@@ -94,6 +94,7 @@ namespace DoorBot
                     {
                         //CheckingBeep();
                         break;
+                        Console.WriteLine("Found MiFare");
                     }
 
                     // Give time to PN532 to process
@@ -107,6 +108,7 @@ namespace DoorBot
                 }
                 else
                 {
+                    Console.WriteLine("Data is not null");
                     //Thread.Sleep(100);
                 }
 
@@ -200,7 +202,9 @@ namespace DoorBot
             while (true)
             {
                 ReadMiFare(pn532);
+                Console.WriteLine("End of Loop");
             }
+            Console.WriteLine("End of loop function (going to main)");
         }
 
 
