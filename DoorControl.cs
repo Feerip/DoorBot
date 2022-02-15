@@ -89,7 +89,9 @@ namespace DoorBot
                 byte[]? retData = null;
                 while (/*(!Console.KeyAvailable)*/ true)
                 {
-                    retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
+                    PollingType[] type = new PollingType[1] { PollingType.GenericPassive106kbps };
+                    retData = pn532.AutoPoll(0x01, 100, type);
+                    //retData = pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
                     if (retData is object)
                     {
                         //CheckingBeep();
@@ -112,12 +114,10 @@ namespace DoorBot
                     //Thread.Sleep(100);
                 }
 
-                //var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
-                PollingType[] type = new PollingType[1] { PollingType.GenericPassive106kbps };
-                var decrypted = pn532.AutoPoll(0x12, 100, type);
+                var decrypted = pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
                 if (decrypted is object)
                 {
-                    string id = $"{BitConverter.ToString(decrypted/*.NfcId*/)}";
+                    string id = $"{BitConverter.ToString(decrypted.NfcId)}";
                     // Sanitize the input from pn532 by removing -'s
                     string processedID = id.Replace("-", "");
                     
