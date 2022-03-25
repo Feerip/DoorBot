@@ -5,7 +5,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace InteractionFramework.Modules
+namespace DoorBot.Modules
 {
     public enum Hobby
     {

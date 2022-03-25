@@ -1,11 +1,11 @@
 ﻿using Discord.Interactions;
 using Discord.WebSocket;
 
-using InteractionFramework.Attributes;
+using DoorBot.Attributes;
 
 using System.Threading.Tasks;
 
-namespace InteractionFramework
+namespace DoorBot
 {
     // As with all other modules, we create the context by defining what type of interaction this module is supposed to target.
     internal class ComponentModule : InteractionModuleBase<SocketInteractionContext<SocketMessageComponent>>

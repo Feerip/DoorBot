@@ -4,7 +4,7 @@ using Discord.WebSocket;
 
 using System.Threading.Tasks;
 
-namespace InteractionFramework.Modules
+namespace DoorBot.Modules
 {
     // A transient module for executing commands. This module will NOT keep any information after the command is executed.
     class UserCommandModule : InteractionModuleBase<SocketInteractionContext<SocketUserCommand>>

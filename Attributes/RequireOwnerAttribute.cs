@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace InteractionFramework.Attributes
+namespace DoorBot.Attributes
 {
     public class RequireOwnerAttribute : PreconditionAttribute
     {

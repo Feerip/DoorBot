@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 using DoorBot;
 
-namespace InteractionFramework
+namespace DoorBot
 {
     class Program
     {

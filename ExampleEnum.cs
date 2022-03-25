@@ -1,4 +1,4 @@
-﻿namespace InteractionFramework
+﻿namespace DoorBot
 {
     public enum ExampleEnum
     {

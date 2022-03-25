@@ -5,7 +5,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace InteractionFramework.Attributes
+namespace DoorBot.Attributes
 {
     internal class DoUserCheck : PreconditionAttribute
     {

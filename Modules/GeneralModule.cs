@@ -3,7 +3,7 @@ using Discord.Interactions;
 
 using System.Threading.Tasks;
 
-namespace InteractionFramework.Modules
+namespace DoorBot.Modules
 {
     // Interation modules must be public and inherit from an IInterationModuleBase
     public class GeneralModule : InteractionModuleBase<SocketInteractionContext>
