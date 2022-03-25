@@ -19,10 +19,10 @@ namespace InteractionFramework
         static async Task Main(string[] args)
         {
 
-            DoorAuth db = DoorAuth.GetDoorAuth();
-            DoorControl door = DoorControl.GetDoorControl();
+            DoorUserDB db = DoorUserDB.GetInstance();
 
-            
+            NFCReader dc = new();
+
             // One of the more flexable ways to access the configuration data is to use the Microsoft's Configuration model,
             // this way we can avoid hard coding the environment secrets. I opted to use the Json and environment variable providers here.
             IConfiguration config = new ConfigurationBuilder()
@@ -30,17 +30,32 @@ namespace InteractionFramework
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
+
+
             Task bott = BotRunAsync(config);
-            Task doort = door.CheckLoop();
+            Task doort = NfcLoop(dc);
+            
 
             await Task.WhenAll(bott, doort);
 
+            //door.Dispose();
+            Console.WriteLine("EXITING");
+            //Console.ReadLine();
+
+        }
+
+        static async Task NfcLoop(NFCReader dc)
+        {
+            while (true)
+            {
+                dc.ReadMiFare();
+            }
         }
 
         static async Task BotRunAsync(IConfiguration configuration)
         {
             // Dependency injection is a key part of the Interactions framework but it needs to be disposed at the end of the app's lifetime.
-            using var services = ConfigureServices(configuration);
+            await using var services = ConfigureServices(configuration);
 
             var client = services.GetRequiredService<DiscordSocketClient>();
             var commands = services.GetRequiredService<InteractionService>();

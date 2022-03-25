@@ -45,7 +45,7 @@ namespace InteractionFramework.Modules
         [SlashCommand("bitrate", "Gets the bitrate of a specific voice channel.")]
         public async Task GetBitrateAsync([ChannelTypes(ChannelType.Voice, ChannelType.Stage)] IChannel channel)
         {
-            var voiceChannel = channel as IVoiceChannel;
+            IVoiceChannel voiceChannel = (IVoiceChannel)channel;
             await RespondAsync(text: $"This voice channel has a bitrate of {voiceChannel.Bitrate}");
         }
     }

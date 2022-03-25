@@ -112,6 +112,7 @@ namespace InteractionFramework.Modules
         [ComponentInteraction("roleSelect")]
         public async Task RoleSelect(params string[] selections)
         {
+            throw new NotImplementedException();
             // implement
         }
     }
