@@ -122,7 +122,7 @@ namespace DoorBot
                     {
                         // Fire off the log entry and move on without waiting
                         Task log = _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
-                        OpenDoor();
+                        _gpioOutput.OpenDoorWithBeep();
                         Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
                     }
                     // If not
@@ -130,7 +130,7 @@ namespace DoorBot
                     {
                         // Fire off the log entry and move on without waiting
                         Task log = _doorAuth.AddToLog(processedID, null, null, null, false);
-                        BadBeep();
+                        _gpioOutput.BadBeep();
                         // Fires off an async RefreshDB
                         Task refresh = _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed
@@ -143,54 +143,6 @@ namespace DoorBot
                 }
                 //}
             }
-        }
-        private void GoodBeep()
-        {
-            Beep(100);
-            Beep(100);
-
-        }
-        private void BadBeep()
-        {
-            Beep(250);
-            Beep(250);
-            Beep(250);
-        }
-        private void LockBeep()
-        {
-            Beep(25);
-        }
-        private void CheckingBeep()
-        {
-            Beep(100);
-        }
-
-        private void Beep(int milliseconds)
-        {
-#if DEBUG
-            // Adding a runtime platform check so .Net stops complaining
-            // even though I know this code will never run on anything than Windows
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                Console.Beep(3000, milliseconds);
-            
-#else
-            _gpioOutput.BuzzerHigh();
-            Thread.Sleep(milliseconds);
-            _gpioOutput.BuzzerLow();
-#endif
-            Thread.Sleep(50);
-        }
-
-        public void OpenDoor()
-        {
-            // Open it up
-            _gpioOutput.MagnetHigh();
-            GoodBeep();
-            Thread.Sleep(7000);
-
-            // Lock it down again 
-            LockBeep();
-            _gpioOutput.MagnetLow();      
         }
 
         public void Dispose()

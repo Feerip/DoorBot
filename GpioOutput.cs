@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -61,5 +62,53 @@ namespace DoorBot
 #endif
         }
 
+        private void Beep(int milliseconds)
+        {
+#if DEBUG
+            // Adding a runtime platform check so .Net stops complaining
+            // even though I know this code will never run on anything than Windows
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                Console.Beep(3000, milliseconds);
+
+#else
+            BuzzerHigh();
+            Thread.Sleep(milliseconds);
+            BuzzerLow();
+#endif
+            Thread.Sleep(50);
+        }
+
+        public void GoodBeep()
+        {
+            Beep(100);
+            Beep(100);
+
+        }
+        public void BadBeep()
+        {
+            Beep(250);
+            Beep(250);
+            Beep(250);
+        }
+        public void LockBeep()
+        {
+            Beep(25);
+        }
+        public void CheckingBeep()
+        {
+            Beep(100);
+        }
+
+        public void OpenDoorWithBeep()
+        {
+            // Open it up
+            MagnetHigh();
+            GoodBeep();
+            Thread.Sleep(7000);
+
+            // Lock it down again 
+            LockBeep();
+            MagnetLow();
+        }
     }
 }
