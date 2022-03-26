@@ -1,6 +1,8 @@
 ﻿using Discord;
 using Discord.Interactions;
 
+using Microsoft.Extensions.Configuration;
+
 using System.Threading.Tasks;
 
 namespace DoorBot.Modules
@@ -31,11 +33,14 @@ namespace DoorBot.Modules
         // You can use a number of parameter types in you Slash Command handlers (string, int, double, bool, IUser, IChannel, IMentionable, IRole, Enums) by default. Optionally,
         // you can implement your own TypeConverters to support a wider range of parameter types. For more information, refer to the library documentation.
         // Optional method parameters(parameters with a default value) also will be displayed as optional on Discord.
-       
+
         [SlashCommand("generate-dobby-interface", "Posts a message in this channel with the Dobby interface.")]
         [RequireOwner]
         public async Task GenerateDobbyInterface()
         {
+            IRole dobbyRequiredRole = Context.Guild.GetRole(DoorUserDB._config.GetValue<ulong>("dobbyRequiredRole"));
+
+
             ComponentBuilder componentBuilder = new();
 
             ButtonBuilder openDoorBuilder = new ButtonBuilder()
@@ -47,22 +52,75 @@ namespace DoorBot.Modules
 
             componentBuilder.WithButton(openDoorBuilder);
 
-            await RespondAsync(text: null, components: componentBuilder.Build());
+            string message = $"Door control ({dobbyRequiredRole.Mention} only) for:\n" +
+                "`1611 McClellan Drive`\n" +
+                "`Klamath Falls, OR, 97603`";
+
+            await RespondAsync(text: message, components: componentBuilder.Build());
         }
 
         [ComponentInteraction("dobbyOpen")]
-        [RequireRole(947640008850964530)]
+        //[RequireRole(947640008850964530)] // Testing with CAB role
+        //[RequireRole(947633653570207785)] // Testing with Brothers role
         public async Task DobbyOpen()
         {
             GpioOutput gpioOutput = GpioOutput.GetInstance();
+            DoorUserDB db = DoorUserDB.GetInstance();
+            IGuildUser? user = Context.User as IGuildUser;
+            IRole authorizedRole = Context.Guild.GetRole(DoorUserDB._config.GetValue<ulong>("dobbyRequiredRole"));
+            bool isAuthorized = false;
+            string? message;
+            string? reason = null;
+            string keyTypeString = "Discord (Dobby Button - Brothers Only)";
+            string colorString = "";
+            string? userNickname = null;
 
-            // We really don't care if it finishes or not, so just discard it.
-            _ = gpioOutput.OpenDoorWithBeep();
+            // If user is not null, that means the conversion to IGuildUser was successful, so we can pull the server nickname.
+            if (user is not null)
+            {
+                userNickname = user.Nickname;
+            }
+            // If user is null, that means the conversion failed, and we have to set the nickname to the user's full Username#Discriminator for logging purposes.
+            if (user is null)
+            {
+                //await RespondAsync("Error: Not authorized. Reason unknown.", ephemeral: true);
+                isAuthorized = false;
+                reason = "Unknown.";
+                userNickname = Context.User.Username + "#" + Context.User.Discriminator;
+            }
+            else if (!user.RoleIds.Contains(authorizedRole.Id))
+            {
+                //await RespondAsync($"Error: Not authorized. Reason: You must have the {authorizedRole.Mention} role to use this feature.", ephemeral: true);
+                reason = $"You must have the {authorizedRole.Mention} role to use this feature.";
+            }
+            // If neither of the above conditions are triggered, the user is authorized.
+            else
+            {
+                isAuthorized = true;
+            }
+
+            // Set the response to the user based on authorization
+            if (isAuthorized)
+                message = "**Door open command has been sent.**";
+            else
+                message = $"**Error: Not authorized.** Reason: {reason}";
+
+            // Respond to the user first before logging so that the interface doesn't break from the user perspective.
+            await RespondAsync($"{message}\n" +
+                $"Note: " +
+                $"`{(isAuthorized ? "Authorized" : "Unauthorized")}`" +
+                $" access by {Context.User.Mention} has been logged.",
+                ephemeral: true);
+
+            // Regardless of authorization, log the entry before going any further. If failed, the exception thrown will prevent the door from being opened.
+            await db.AddToLog(id: Context.User.Id.ToString(), name: userNickname, keyType: keyTypeString, color: colorString, accessGranted: isAuthorized);
             
-
-            await RespondAsync("Done.", ephemeral: true);
+            // Once we reach this point we really don't care if the door command finishes or not, so just discard it.
+            if (isAuthorized)
+                _ = gpioOutput.OpenDoorWithBeep(); 
+            else
+                _ = gpioOutput.BadBeep();
         }
-
 
         [SlashCommand("door-message", "Posts the door open message")]
         [RequireOwner]
@@ -82,9 +140,9 @@ namespace DoorBot.Modules
             await RespondAsync("test", components: comp_builder.Build());
 
         }
-        
-        
-        
+
+
+
         // [Summary] lets you customize the name and the description of a parameter
         [SlashCommand("echo", "Repeat the input")]
         public async Task Echo(string echo, [Summary(description: "mention the user")] bool mention = false)

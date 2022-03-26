@@ -20,6 +20,7 @@ namespace DoorBot
 {
     public sealed class DoorUserDB
     {
+        public static IConfiguration? _config { get; private set; } = null;
         private static DoorUserDB _instance = new();
 
         private readonly string _applicationName = "DoorBot";
@@ -71,6 +72,11 @@ namespace DoorBot
 
         public static DoorUserDB GetInstance()
         {
+            return _instance;
+        }
+        public static DoorUserDB GetInstance(IConfiguration config)
+        {
+            _config = config;
             return _instance;
         }
 

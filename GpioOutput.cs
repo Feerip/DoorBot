@@ -84,7 +84,7 @@ namespace DoorBot
             Beep(100);
 
         }
-        public void BadBeep()
+        public async Task BadBeep()
         {
             Beep(250);
             Beep(250);

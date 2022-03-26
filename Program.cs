@@ -18,11 +18,6 @@ namespace DoorBot
         // Entry point of the program.
         static async Task Main(string[] args)
         {
-
-            DoorUserDB db = DoorUserDB.GetInstance();
-
-            NFCReader dc = new();
-
             // One of the more flexable ways to access the configuration data is to use the Microsoft's Configuration model,
             // this way we can avoid hard coding the environment secrets. I opted to use the Json and environment variable providers here.
             IConfiguration config = new ConfigurationBuilder()
@@ -30,7 +25,11 @@ namespace DoorBot
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
+            DoorUserDB db = DoorUserDB.GetInstance(config);
 
+            NFCReader dc = new();
+
+            
 
             Task bott = BotRunAsync(config);
             Task doort = NfcLoop(dc);
