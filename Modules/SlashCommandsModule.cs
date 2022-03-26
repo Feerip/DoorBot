@@ -17,7 +17,7 @@ namespace DoorBot.Modules
     }
 
     // A transient module for executing commands. This module will NOT keep any information after the command is executed.
-    class SlashCommandModule : InteractionModuleBase<SocketInteractionContext<SocketSlashCommand>>
+    class SlashCommandsModule : InteractionModuleBase<SocketInteractionContext<SocketSlashCommand>>
     {
         // Will be called before execution. Here you can populate several entities you may want to retrieve before executing a command. 
         // I.E. database objects
@@ -48,5 +48,7 @@ namespace DoorBot.Modules
             IVoiceChannel voiceChannel = (IVoiceChannel)channel;
             await RespondAsync(text: $"This voice channel has a bitrate of {voiceChannel.Bitrate}");
         }
+
+        
     }
 }

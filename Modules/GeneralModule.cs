@@ -31,12 +31,39 @@ namespace DoorBot.Modules
         // You can use a number of parameter types in you Slash Command handlers (string, int, double, bool, IUser, IChannel, IMentionable, IRole, Enums) by default. Optionally,
         // you can implement your own TypeConverters to support a wider range of parameter types. For more information, refer to the library documentation.
         // Optional method parameters(parameters with a default value) also will be displayed as optional on Discord.
+       
+        [SlashCommand("generate-dobby-interface", "Posts a message in this channel with the Dobby interface.")]
+        [RequireOwner]
+        public async Task GenerateDobbyInterface()
+        {
+            ComponentBuilder componentBuilder = new();
+
+            ButtonBuilder openDoorBuilder = new ButtonBuilder()
+                .WithDisabled(false)
+                .WithLabel("Open Door")
+                .WithStyle(ButtonStyle.Primary)
+                .WithCustomId("dobbyOpen")
+                ;
+
+            componentBuilder.WithButton(openDoorBuilder);
+
+            await RespondAsync(text: null, components: componentBuilder.Build());
+        }
+
+        [ComponentInteraction("dobbyOpen")]
+        [RequireRole(947640008850964530)]
+        public async Task DobbyOpen()
+        {
+            GpioOutput gpioOutput = GpioOutput.GetInstance();
+
+            // We really don't care if it finishes or not, so just discard it.
+            _ = gpioOutput.OpenDoorWithBeep();
+            
+
+            await RespondAsync("Done.", ephemeral: true);
+        }
 
 
-        
-        
-        
-        
         [SlashCommand("door-message", "Posts the door open message")]
         [RequireOwner]
         public async Task DoorMessage()
@@ -46,7 +73,7 @@ namespace DoorBot.Modules
                 .WithDisabled(false)
                 .WithLabel("Open Door")
                 .WithStyle(ButtonStyle.Success)
-                .WithCustomId("opendoor");
+                .WithCustomId("openDoor");
 
             comp_builder.WithButton(button_builder);
 

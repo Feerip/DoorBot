@@ -99,12 +99,12 @@ namespace DoorBot
             Beep(100);
         }
 
-        public void OpenDoorWithBeep()
+        public async Task OpenDoorWithBeep()
         {
             // Open it up
             MagnetHigh();
             GoodBeep();
-            Thread.Sleep(7000);
+            await Task.Delay(7000);
 
             // Lock it down again 
             LockBeep();
