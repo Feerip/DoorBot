@@ -34,6 +34,16 @@ namespace DoorBot.Modules
         // you can implement your own TypeConverters to support a wider range of parameter types. For more information, refer to the library documentation.
         // Optional method parameters(parameters with a default value) also will be displayed as optional on Discord.
 
+        [SlashCommand("test-buzzer", "Debugging command")]
+        [RequireOwner]
+        public async Task TestBuzzer()
+        {
+            GpioOutput gpioOutput = GpioOutput.GetInstance();
+            gpioOutput.TestBeep();
+
+            await RespondAsync("Done", ephemeral: true);
+        }
+
         [SlashCommand("generate-dobby-interface", "Posts a message in this channel with the Dobby interface.")]
         [RequireOwner]
         public async Task GenerateDobbyInterface()

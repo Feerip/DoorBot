@@ -78,6 +78,11 @@ namespace DoorBot
             Thread.Sleep(50);
         }
 
+        public void TestBeep()
+        {
+            Beep(3000);
+        }
+
         public void GoodBeep()
         {
             Beep(100);
