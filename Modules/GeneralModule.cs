@@ -38,10 +38,11 @@ namespace DoorBot.Modules
         [RequireOwner]
         public async Task TestBuzzer()
         {
+            await DeferAsync();
             GpioOutput gpioOutput = GpioOutput.GetInstance();
             gpioOutput.TestBeep();
 
-            await RespondAsync("Done", ephemeral: true);
+            await FollowupAsync("Done", ephemeral: true);
         }
 
         [SlashCommand("generate-dobby-interface", "Posts a message in this channel with the Dobby interface.")]
