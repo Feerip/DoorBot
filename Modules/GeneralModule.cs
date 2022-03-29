@@ -39,6 +39,7 @@ namespace DoorBot.Modules
         public async Task TestBuzzer()
         {
             await DeferAsync();
+            await Task.Delay(5000);
             GpioOutput gpioOutput = GpioOutput.GetInstance();
             gpioOutput.TestBeep();
 
