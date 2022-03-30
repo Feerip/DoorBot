@@ -27,7 +27,7 @@ namespace DoorBot
 
             //DoorUserDB db = DoorUserDB.GetInstance(config);
 
-            NFCReader dc = new();
+            //NFCReader dc = new();
 
             
 
@@ -52,7 +52,7 @@ namespace DoorBot
             {
                 try
                 {
-                    using (NFCReader dc = new())
+                    using (var dc = new NFCReader())
                     {
                         dc.ReadMiFare();
                     }
