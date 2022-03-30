@@ -46,7 +46,7 @@ namespace DoorBot
 
         }
 
-        static Task NfcLoop(NFCReader dc)
+        static void NfcLoop(NFCReader dc)
         {
             while (true)
             {

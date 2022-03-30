@@ -66,7 +66,7 @@ namespace DoorBot
             DebugOutput("Finished initializing PN532 in DoorControl ctor.");
         }
 
-        public Task ReadMiFare()
+        public void ReadMiFare()
         {
             DebugOutput("READMIFARE");
             if (_pn532 is not null)
@@ -93,13 +93,14 @@ namespace DoorBot
 
                     // Give time to PN532 to process
                     //Thread.Sleep(200);
-                    Task.Delay(1000);
+                    //Task.Delay(1000);
+                    Thread.Sleep(1000);
                 }
 
                 if (retData is null)
                 {
                     DebugOutput("HELP");
-                    return Task.CompletedTask;
+                    return;
                 }
                 else
                 {
@@ -139,7 +140,9 @@ namespace DoorBot
                         // Fires off an async RefreshDB
                         _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed
-                        Task.Delay(2000);
+
+                        //Task.Delay(2000);
+                        Thread.Sleep(2000);
                         //Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
                         // If the refresh isn't done yet, wait until it is.
                     }
@@ -147,7 +150,6 @@ namespace DoorBot
                 }
                 //}
             }
-            return Task.CompletedTask;
         }
 
         public void Dispose()
