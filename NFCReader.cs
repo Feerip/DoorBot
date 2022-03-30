@@ -75,7 +75,8 @@ namespace DoorBot
                 //while (true)
                 //{
                 byte[]? retData = null;
-                while ((!Console.KeyAvailable))
+                //while ((!Console.KeyAvailable))
+                while (true)
                 {
                     DebugOutput("ENTERING KEYAVAILABLE WHILE");
                     //PollingType[] type = new PollingType[] { PollingType.Passive106kbpsISO144443_4A, PollingType.MifareCard, PollingType.GenericPassive106kbps, PollingType.Passive106kbps, PollingType.Passive106kbpsISO144443_4B, PollingType.DepPassive106kbps, PollingType.DepActive106kbps  };
