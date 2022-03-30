@@ -34,7 +34,7 @@ namespace DoorBot
             Task bott = BotRunAsync(config);
             //Task doort = Task.Run(NfcLoop(dc));
 
-            _ = Task.Run( () => NfcLoop(dc)));
+            _ = Task.Run( () => NfcLoop(dc));
 
             //await Task.WhenAll(bott, doort);
 
