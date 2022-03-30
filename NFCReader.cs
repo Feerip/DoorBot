@@ -43,11 +43,11 @@ namespace DoorBot
 #else   
         private readonly string _device = "/dev/ttyS0";
 #endif
-        private DoorUserDB _doorAuth;
-        private Pn532 _pn532;
-        private GpioOutput _gpioOutput;
+        private readonly DoorUserDB _doorAuth;
+        private readonly Pn532 _pn532;
+        private readonly GpioOutput _gpioOutput;
 
-        private void DebugOutput(string message)
+        private static void DebugOutput(string message)
         {
 #if DEBUG
             Console.WriteLine(message);
@@ -74,7 +74,7 @@ namespace DoorBot
                 DebugOutput("READMIFARE NOT NULL");
                 //while (true)
                 //{
-                byte[]? retData = null;
+                byte[]? retData /*= null*/;
                 //while ((!Console.KeyAvailable))
                 while (true)
                 {
@@ -83,7 +83,8 @@ namespace DoorBot
                     //retData = pn532.AutoPoll(0xFF, 200, type);
                     retData = _pn532.ListPassiveTarget(MaxTarget.One, TargetBaudRate.B106kbpsTypeA);
 
-                    if (retData is object)
+
+                    if (retData is not null)
                     {
                         //CheckingBeep();
                         DebugOutput("Found MiFare");
@@ -109,7 +110,7 @@ namespace DoorBot
                 //var decrypted = pn532.TryDecodeData106kbpsTypeB(retData.AsSpan().Slice(1));
                 var decrypted = _pn532.TryDecode106kbpsTypeA(retData.AsSpan().Slice(1));
 
-                if (decrypted is object)
+                if (decrypted is not null)
                 {
                     string id = $"{BitConverter.ToString(decrypted.NfcId)}";
                     //Console.WriteLine($"{BitConverter.ToString(decrypted.NfcId)} - {decrypted.Sak} - {decrypted.Atqa} - {BitConverter.ToString(decrypted.Ats)}");
@@ -124,7 +125,8 @@ namespace DoorBot
                     if (user is not null)
                     {
                         // Fire off the log entry and move on without waiting
-                        Task log = _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
+                        /* Task log =*/
+                        _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
                         _ = _gpioOutput.OpenDoorWithBeep();
                         //Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
                     }
@@ -132,8 +134,8 @@ namespace DoorBot
                     else
                     {
                         // Fire off the log entry and move on without waiting
-                        Task log = _doorAuth.AddToLog(processedID, null, null, null, false);
-                        _ =_gpioOutput.BadBeep();
+                        /*Task log =*/ _doorAuth.AddToLog(processedID, null, null, null, false);
+                        _ = _gpioOutput.BadBeep();
                         // Fires off an async RefreshDB
                         _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed

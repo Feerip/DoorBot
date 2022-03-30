@@ -25,7 +25,7 @@ namespace DoorBot
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
-            DoorUserDB db = DoorUserDB.GetInstance(config);
+            //DoorUserDB db = DoorUserDB.GetInstance(config);
 
             NFCReader dc = new();
 
