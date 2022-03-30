@@ -52,7 +52,7 @@ namespace DoorBot
 #if DEBUG
             Console.WriteLine(message);
 #endif
-            //Console.WriteLine(message);
+            Console.WriteLine(message);
         }
 
         public NFCReader()
