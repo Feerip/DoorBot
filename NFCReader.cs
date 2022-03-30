@@ -52,6 +52,7 @@ namespace DoorBot
 #if DEBUG
             Console.WriteLine(message);
 #endif
+            Console.WriteLine(message);
         }
 
         public NFCReader()
@@ -67,7 +68,7 @@ namespace DoorBot
 
         public async Task ReadMiFare()
         {
-            Console.WriteLine("READMIFARE");
+            DebugOutput("READMIFARE");
             if (_pn532 is not null)
             {
                 DebugOutput("READMIFARE NOT NULL");
