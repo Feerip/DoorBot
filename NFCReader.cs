@@ -74,7 +74,7 @@ namespace DoorBot
                 DebugOutput("READMIFARE NOT NULL");
                 //while (true)
                 //{
-                byte[]? retData /*= null*/;
+                byte[]? retData = null;
                 //while ((!Console.KeyAvailable))
                 while (true)
                 {

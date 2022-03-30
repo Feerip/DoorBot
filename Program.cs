@@ -34,7 +34,7 @@ namespace DoorBot
             Task bott = BotRunAsync(config);
             //Task doort = Task.Run(NfcLoop(dc));
 
-            _ = Task.Run( () => NfcLoop(dc));
+            _ = Task.Run( () => NfcLoop());
 
             //await Task.WhenAll(bott, doort);
 
@@ -46,11 +46,22 @@ namespace DoorBot
 
         }
 
-        static void NfcLoop(NFCReader dc)
+        static void NfcLoop()
         {
             while (true)
             {
-                dc.ReadMiFare();
+                try
+                {
+                    using (NFCReader dc = new())
+                    {
+                        dc.ReadMiFare();
+                    }
+                    Console.WriteLine("New Loop");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
         }
 
