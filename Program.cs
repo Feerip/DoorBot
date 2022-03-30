@@ -34,7 +34,7 @@ namespace DoorBot
             Task bott = BotRunAsync(config);
             //Task doort = Task.Run(NfcLoop(dc));
 
-            //_ = Task.Run( () => NfcLoop());
+            _ = Task.Run( () => NfcLoop());
 
             //await Task.WhenAll(bott, doort);
 
@@ -61,6 +61,7 @@ namespace DoorBot
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
+                    Environment.Exit(1);
                 }
             }
         }
