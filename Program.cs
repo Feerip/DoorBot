@@ -47,7 +47,8 @@ namespace DoorBot
         {
             while (true)
             {
-                await dc.ReadMiFare();
+                Task read = dc.ReadMiFare();
+                await Task.WhenAll(read);
             }
         }
 

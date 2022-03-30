@@ -89,11 +89,12 @@ namespace DoorBot
             Beep(100);
 
         }
-        public async Task BadBeep()
+        public Task BadBeep()
         {
             Beep(250);
             Beep(250);
             Beep(250);
+            return Task.CompletedTask;
         }
         public void LockBeep()
         {
@@ -104,16 +105,17 @@ namespace DoorBot
             Beep(100);
         }
 
-        public async Task OpenDoorWithBeep()
+        public Task OpenDoorWithBeep()
         {
             // Open it up
             MagnetHigh();
             GoodBeep();
-            await Task.Delay(7000);
+            Task.Delay(7000);
 
             // Lock it down again 
             LockBeep();
             MagnetLow();
+            return Task.CompletedTask;
         }
     }
 }

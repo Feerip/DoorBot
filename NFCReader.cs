@@ -66,7 +66,7 @@ namespace DoorBot
             DebugOutput("Finished initializing PN532 in DoorControl ctor.");
         }
 
-        public async Task ReadMiFare()
+        public Task ReadMiFare()
         {
             DebugOutput("READMIFARE");
             if (_pn532 is not null)
@@ -92,13 +92,13 @@ namespace DoorBot
 
                     // Give time to PN532 to process
                     //Thread.Sleep(200);
-                    await Task.Delay(1000 );
+                    Task.Delay(1000);
                 }
 
                 if (retData is null)
                 {
                     DebugOutput("HELP");
-                    return;
+                    return Task.CompletedTask;
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace DoorBot
                         // Fire off the log entry and move on without waiting
                         Task log = _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
                         _ = _gpioOutput.OpenDoorWithBeep();
-                        Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
+                        //Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
                     }
                     // If not
                     else
@@ -137,15 +137,16 @@ namespace DoorBot
                         // Fires off an async RefreshDB
                         Task refresh = _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed
-                        await Task.Delay(2000);
-                        Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
+                        Task.Delay(2000);
+                        //Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
                         // If the refresh isn't done yet, wait until it is.
-                        await Task.WhenAll(refresh);
+                        Task.WhenAll(refresh);
                     }
                     Console.WriteLine();
                 }
                 //}
             }
+            return Task.CompletedTask;
         }
 
         public void Dispose()
