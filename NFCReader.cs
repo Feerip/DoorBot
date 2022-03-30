@@ -65,9 +65,9 @@ namespace DoorBot
             DebugOutput("Finished initializing PN532 in DoorControl ctor.");
         }
 
-        public void ReadMiFare()
+        public async Task ReadMiFare()
         {
-            DebugOutput("READMIFARE");
+            Console.WriteLine("READMIFARE");
             if (_pn532 is not null)
             {
                 DebugOutput("READMIFARE NOT NULL");
@@ -89,7 +89,8 @@ namespace DoorBot
                     }
 
                     // Give time to PN532 to process
-                    Thread.Sleep(200);
+                    //Thread.Sleep(200);
+                    await Task.Delay(200);
                 }
 
                 if (retData is null)
