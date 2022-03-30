@@ -135,12 +135,11 @@ namespace DoorBot
                         Task log = _doorAuth.AddToLog(processedID, null, null, null, false);
                         _ =_gpioOutput.BadBeep();
                         // Fires off an async RefreshDB
-                        Task refresh = _doorAuth.RefreshDB();
+                        _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed
                         Task.Delay(2000);
                         //Task cLog = Console.Out.WriteLineAsync($"Denied: {DateTime.Now} {processedID}");
                         // If the refresh isn't done yet, wait until it is.
-                        Task.WhenAll(refresh);
                     }
                     Console.WriteLine();
                 }
