@@ -110,7 +110,7 @@ namespace DoorBot
             // Open it up
             MagnetHigh();
             GoodBeep();
-            Task.Delay(7000);
+            Thread.Sleep(7000);
 
             // Lock it down again 
             LockBeep();
