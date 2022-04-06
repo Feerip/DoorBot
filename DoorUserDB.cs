@@ -20,7 +20,11 @@ namespace DoorBot
 {
     public sealed class DoorUserDB
     {
-        public static IConfiguration? _config { get; private set; } = null;
+        public static IConfiguration _config { get; private set; } = new ConfigurationBuilder()
+                .AddEnvironmentVariables(prefix: "DC_")
+                .AddJsonFile("Config/config.json", optional: true)
+                .Build();
+
         private static DoorUserDB _instance = new();
 
         private readonly string _applicationName = "DoorBot";
@@ -45,20 +49,14 @@ namespace DoorBot
 
         private List<List<string>> _database = new();
 
-        IConfiguration _configuration;
+        //IConfiguration _configuration;
 
 
         private DoorUserDB()
         {
-
-            _configuration = new ConfigurationBuilder()
-                .AddEnvironmentVariables(prefix: "DC_")
-                .AddJsonFile("Config/config.json", optional: true)
-                .Build();
-
-            _spreadsheetID = _configuration.GetValue<string>("spreadsheetID");
-            _authorizedUsersRange = _configuration.GetValue<string>("authorizedUsersRange");
-            _accessLogRange = _configuration.GetValue<string>("accessLogRange");
+            _spreadsheetID = _config.GetValue<string>("spreadsheetID");
+            _authorizedUsersRange = _config.GetValue<string>("authorizedUsersRange");
+            _accessLogRange = _config.GetValue<string>("accessLogRange");
 
             _credentials = GoogleCredential.FromFile(_credentialsFile).CreateScoped(_scopes);
             _service = new SheetsService(new()
