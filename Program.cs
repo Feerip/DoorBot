@@ -29,7 +29,7 @@ namespace DoorBot
 
             //NFCReader dc = new();
 
-            
+
 
             Task bott = BotRunAsync(config);
             //Task doort = Task.Run(NfcLoop(dc));
@@ -83,8 +83,11 @@ namespace DoorBot
             client.Ready += async () =>
             {
                 if (IsDebug())
+                {     
                     // Id of the test guild can be provided from the Configuration object
                     await commands.RegisterCommandsToGuildAsync(configuration.GetValue<ulong>("testGuild"), true);
+                    await commands.RegisterCommandsToGuildAsync(configuration.GetValue<ulong>("roommatesGuild"), true);
+                }
                 else
                     await commands.RegisterCommandsGloballyAsync(true);
             };
