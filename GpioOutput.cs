@@ -35,7 +35,10 @@ namespace DoorBot
             Console.WriteLine($"GPIO pin enabled for door signal output: {LOCK_SIGNAL_PIN}");
 
             _passiveBuzzer = new(PASSIVE_BUZZER_PIN);
-            _passiveBuzzer.PlayTone(880, 1000);
+            _passiveBuzzer.PlayTone(880, 100);
+            _passiveBuzzer.PlayTone(880, 100);
+            _passiveBuzzer.PlayTone(880, 100);
+            _passiveBuzzer.PlayTone(880, 100);
 #endif
         }
 
