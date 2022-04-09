@@ -25,16 +25,15 @@ namespace DoorBot
                 .AddJsonFile("Config/config.json", optional: true)
                 .Build();
 
-            //DoorUserDB db = DoorUserDB.GetInstance(config);
+            DoorUserDB db = DoorUserDB.GetInstance(config);
 
             //NFCReader dc = new();
 
 
 
             Task bott = BotRunAsync(config);
-            //Task doort = Task.Run(NfcLoop(dc));
 
-            //_ = Task.Run( () => NfcLoop());
+            _ = Task.Run(NfcLoop);
 
             //await Task.WhenAll(bott, doort);
 
@@ -48,21 +47,22 @@ namespace DoorBot
 
         static void NfcLoop()
         {
-            while (true)
+            try
             {
-                try
+                using var dc = new NFCReader();
+                while (true)
                 {
-                    using (var dc = new NFCReader())
-                    {
-                        dc.ReadMiFare();
-                    }
+
+                    dc.ReadMiFare();
+
                     Console.WriteLine("New Loop");
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                    Environment.Exit(1);
-                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                Environment.Exit(1);
             }
         }
 
@@ -83,7 +83,7 @@ namespace DoorBot
             client.Ready += async () =>
             {
                 if (IsDebug())
-                {     
+                {
                     // Id of the test guild can be provided from the Configuration object
                     await commands.RegisterCommandsToGuildAsync(configuration.GetValue<ulong>("testGuild"), true);
                     await commands.RegisterCommandsToGuildAsync(configuration.GetValue<ulong>("roommatesGuild"), true);

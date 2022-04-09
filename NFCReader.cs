@@ -51,8 +51,9 @@ namespace DoorBot
         {
 #if DEBUG
             Console.WriteLine(message);
-#endif
+#else
             Console.WriteLine(message);
+#endif
         }
 
         public NFCReader()

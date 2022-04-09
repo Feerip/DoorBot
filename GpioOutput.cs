@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Iot.Device.Buzzer;
+
+using System;
 using System.Collections.Generic;
 using System.Device.Gpio;
 using System.Linq;
@@ -14,7 +16,12 @@ namespace DoorBot
         
         private readonly int BUZZER_PIN = 17;
         private readonly int LOCK_SIGNAL_PIN = 23;
+        private readonly int PASSIVE_BUZZER_PIN = 27;
+
+
+
 #if !DEBUG
+        Buzzer _passiveBuzzer;
         GpioController _controller;
 #endif
         private GpioOutput()
@@ -26,6 +33,9 @@ namespace DoorBot
             Console.WriteLine($"GPIO pin enabled for Buzzer: {BUZZER_PIN}");
             _controller.OpenPin(LOCK_SIGNAL_PIN, PinMode.Output);
             Console.WriteLine($"GPIO pin enabled for door signal output: {LOCK_SIGNAL_PIN}");
+
+            _passiveBuzzer = new(PASSIVE_BUZZER_PIN);
+            _passiveBuzzer.PlayTone(440, 1000);
 #endif
         }
 
