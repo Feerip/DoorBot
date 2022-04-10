@@ -52,7 +52,7 @@ namespace DoorBot
 #if DEBUG
             Console.WriteLine(message);
 #else
-            Console.WriteLine(message);
+            //Console.WriteLine(message);
 #endif
         }
 
