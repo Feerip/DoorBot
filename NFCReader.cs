@@ -52,6 +52,7 @@ namespace DoorBot
 #if DEBUG
             Console.WriteLine(message);
 #else
+            // Uncomment for noisy mode
             //Console.WriteLine(message);
 #endif
         }
