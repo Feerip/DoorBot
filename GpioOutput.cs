@@ -27,7 +27,7 @@ namespace DoorBot
         private GpioOutput()
         {
 #if !Windows
-            _controller = new();
+            _controller = new( PinNumberingScheme.Logical, new System.Device.Gpio.Drivers.RaspberryPi3Driver());
 
             _controller.OpenPin(BUZZER_PIN, PinMode.Output);
             Console.WriteLine($"GPIO pin enabled for Buzzer: {BUZZER_PIN}");
