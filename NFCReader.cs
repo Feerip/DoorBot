@@ -94,7 +94,7 @@ namespace DoorBot
                     // Give time to PN532 to process
                     //Thread.Sleep(200);
                     //Task.Delay(1000);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
                 }
 
                 if (retData is null)
