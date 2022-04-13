@@ -33,6 +33,8 @@ namespace DoorBot
 
             Task bott = BotRunAsync(config);
 
+            GpioOutput.StartupBeeps();
+
             _ = Task.Run(NfcLoop);
 
             //await Task.WhenAll(bott, doort);

@@ -45,14 +45,20 @@ namespace DoorBot
 
 
             _passiveBuzzer = new(PASSIVE_BUZZER_PIN);
-            _passiveBuzzer.PlayTone(880, 100);
-            Thread.Sleep(50);
-            _passiveBuzzer.PlayTone(880, 100);
-            Thread.Sleep(50);
-            _passiveBuzzer.PlayTone(880, 100);
-            Thread.Sleep(50);
-            _passiveBuzzer.PlayTone(880, 100);
 
+
+        }
+        public static void StartupBeeps()
+        {
+            SetUp();
+            _passiveBuzzer.PlayTone(880, 100);
+            Thread.Sleep(50);
+            _passiveBuzzer.PlayTone(880, 100);
+            Thread.Sleep(50);
+            _passiveBuzzer.PlayTone(880, 100);
+            Thread.Sleep(50);
+            _passiveBuzzer.PlayTone(880, 100);
+            ShutDown();
         }
 
         private static void ShutDown()
