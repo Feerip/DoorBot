@@ -12,7 +12,7 @@ namespace DoorBot
 {
     public static class GpioOutput
     {
-        private static Semaphore _pool = new(0, 1);
+        private static Semaphore _pool = new(1, 1);
         
         private static readonly int BUZZER_PIN = 17;
         private static readonly int LOCK_SIGNAL_PIN = 23;
