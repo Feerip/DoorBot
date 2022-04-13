@@ -105,10 +105,10 @@ namespace DoorBot
 
 #else
             _passiveBuzzer.StartPlaying(800);
-            //BuzzerHigh();
+            BuzzerHigh();
             Thread.Sleep(milliseconds);
             _passiveBuzzer.StopPlaying();
-            //BuzzerLow();
+            BuzzerLow();
 #endif
             Thread.Sleep(50);
         }
