@@ -10,29 +10,33 @@ using System.Threading.Tasks;
 
 namespace DoorBot
 {
-    public sealed class GpioOutput
+    public static class GpioOutput
     {
-        private static GpioOutput _instance = new();
+        private static Semaphore _pool = new(0, 1);
         
-        private readonly int BUZZER_PIN = 17;
-        private readonly int LOCK_SIGNAL_PIN = 23;
-        private readonly int PASSIVE_BUZZER_PIN = 27;
+        private static readonly int BUZZER_PIN = 17;
+        private static readonly int LOCK_SIGNAL_PIN = 23;
+        private static readonly int PASSIVE_BUZZER_PIN = 27;
 
 
 
-#if !Windows
-        Buzzer _passiveBuzzer;
-        GpioController _controller;
-#endif
-        private GpioOutput()
+        static Buzzer _passiveBuzzer;
+        static GpioController _controller;
+
+        private static void SetUp()
         {
+            _pool.WaitOne();
 #if !Windows
             _controller = new( PinNumberingScheme.Logical, new System.Device.Gpio.Drivers.RaspberryPi3Driver());
+#else
+            _controller = new(PinNumberingScheme.Logical, new Iot.Device.Board.DummyGpioDriver());
+#endif
 
             _controller.OpenPin(BUZZER_PIN, PinMode.Output);
             Console.WriteLine($"GPIO pin enabled for Buzzer: {BUZZER_PIN}");
             _controller.OpenPin(LOCK_SIGNAL_PIN, PinMode.Output);
             Console.WriteLine($"GPIO pin enabled for door signal output: {LOCK_SIGNAL_PIN}");
+
 
             _passiveBuzzer = new(PASSIVE_BUZZER_PIN);
             _passiveBuzzer.PlayTone(880, 100);
@@ -42,43 +46,41 @@ namespace DoorBot
             _passiveBuzzer.PlayTone(880, 100);
             Thread.Sleep(50);
             _passiveBuzzer.PlayTone(880, 100);
-#endif
+
         }
 
-        public static GpioOutput GetInstance()
+        private static void ShutDown()
         {
-            return _instance;
+            _controller.ClosePin(BUZZER_PIN);
+            _controller.ClosePin(LOCK_SIGNAL_PIN);
+            _passiveBuzzer.Dispose();
+            _controller.Dispose();
+
+            _pool.Release();
         }
 
-        public void BuzzerHigh()
+        private static void BuzzerHigh()
         {
-#if !Windows
             _controller.Write(BUZZER_PIN, PinValue.High);
-#endif
         }
 
-        public void BuzzerLow()
+        private static void BuzzerLow()
         {
-#if !Windows
+
             _controller.Write(BUZZER_PIN, PinValue.Low);
-#endif
         }
 
-        public void MagnetHigh()
+        private static void MagnetHigh()
         {
-#if !Windows
             _controller.Write(LOCK_SIGNAL_PIN, PinValue.High);
-#endif
         }
 
-        public void MagnetLow()
+        private static void MagnetLow()
         {
-#if !Windows
             _controller.Write(LOCK_SIGNAL_PIN, PinValue.Low);
-#endif
         }
 
-        private void Beep(int milliseconds)
+        private static void Beep(int milliseconds)
         {
 #if Windows
             // Adding a runtime platform check so .Net stops complaining
@@ -96,35 +98,40 @@ namespace DoorBot
             Thread.Sleep(50);
         }
 
-        public void TestBeep()
+        public static void TestBeep()
         {
+            SetUp();
             Beep(3000);
+            ShutDown();
         }
 
-        public void GoodBeep()
+        private static void GoodBeep()
         {
             Beep(100);
             Beep(100);
 
         }
-        public Task BadBeep()
+        public static Task BadBeep()
         {
+            SetUp();
             Beep(250);
             Beep(250);
             Beep(250);
+            ShutDown();
             return Task.CompletedTask;
         }
-        public void LockBeep()
+        private static void LockBeep()
         {
             Beep(25);
         }
-        public void CheckingBeep()
+        private static void CheckingBeep()
         {
             Beep(100);
         }
 
-        public Task OpenDoorWithBeep()
+        public static Task OpenDoorWithBeep()
         {
+            SetUp();
             // Open it up
             MagnetHigh();
             GoodBeep();
@@ -133,6 +140,7 @@ namespace DoorBot
             // Lock it down again 
             LockBeep();
             MagnetLow();
+            ShutDown();
             return Task.CompletedTask;
         }
     }

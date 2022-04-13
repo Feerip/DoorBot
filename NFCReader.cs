@@ -45,7 +45,6 @@ namespace DoorBot
 #endif
         private readonly DoorUserDB _doorAuth;
         private readonly Pn532 _pn532;
-        private readonly GpioOutput _gpioOutput;
 
         private static void DebugOutput(string message)
         {
@@ -61,7 +60,6 @@ namespace DoorBot
         {
 
             _doorAuth = DoorUserDB.GetInstance();
-            _gpioOutput = GpioOutput.GetInstance();
 
             DebugOutput("Initializing PN532 in DoorControl ctor...");
             _pn532 = new(_device);
@@ -130,7 +128,7 @@ namespace DoorBot
                         // Fire off the log entry and move on without waiting
                         /* Task log =*/
                         _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
-                        _ = _gpioOutput.OpenDoorWithBeep();
+                        _ = GpioOutput.OpenDoorWithBeep();
                         //Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
                     }
                     // If not
@@ -138,7 +136,7 @@ namespace DoorBot
                     {
                         // Fire off the log entry and move on without waiting
                         /*Task log =*/ _doorAuth.AddToLog(processedID, null, null, null, false);
-                        _ = _gpioOutput.BadBeep();
+                        _ = GpioOutput.BadBeep();
                         // Fires off an async RefreshDB
                         _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed

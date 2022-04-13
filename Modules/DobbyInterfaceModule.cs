@@ -42,8 +42,7 @@ namespace DoorBot.Modules
         {
             await DeferAsync();
             await Task.Delay(5000);
-            GpioOutput gpioOutput = GpioOutput.GetInstance();
-            gpioOutput.TestBeep();
+            GpioOutput.TestBeep();
 
             await FollowupAsync("Done", ephemeral: true);
         }
@@ -199,7 +198,7 @@ namespace DoorBot.Modules
             string keyTypeString = $"Dobby in {Context.Guild.Name}";
             string colorString = "";
             string message;
-            GpioOutput gpioOutput = GpioOutput.GetInstance();
+            
 
             // Command 0: Open front door
             if (command == 0)
@@ -214,9 +213,9 @@ namespace DoorBot.Modules
 
                 // Once we reach this point we really don't care if the door command finishes or not, so just discard it.
                 if (isAuthorized)
-                    _ = gpioOutput.OpenDoorWithBeep();
+                    _ = GpioOutput.OpenDoorWithBeep();
                 else
-                    _ = gpioOutput.BadBeep();
+                    _ = GpioOutput.BadBeep();
             }
             // Commands 1-3: Garage door stuff
             else if (command >= 1 && command <= 3)
