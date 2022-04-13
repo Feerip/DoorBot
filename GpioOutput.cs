@@ -25,7 +25,13 @@ namespace DoorBot
 
         private static void SetUp()
         {
+#if DEBUG
+            Console.WriteLine("Setup waiting for semaphore...");
+#endif
             _pool.WaitOne();
+#if DEBUG
+            Console.WriteLine("Got semaphore. Continuing setup.");
+#endif
 #if !Windows
             _controller = new( PinNumberingScheme.Logical, new System.Device.Gpio.Drivers.RaspberryPi3Driver());
 #else
@@ -57,6 +63,9 @@ namespace DoorBot
             _controller.Dispose();
 
             _pool.Release();
+#if DEBUG
+            Console.WriteLine("Released semaphore");
+#endif
         }
 
         private static void BuzzerHigh()
