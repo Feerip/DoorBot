@@ -127,7 +127,7 @@ namespace DoorBot
                     {
                         // Fire off the log entry and move on without waiting
                         /* Task log =*/
-                        _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
+                        _ = _doorAuth.AddToLog(user[0], user[1], user[2], user[3], true);
                         _ = GpioOutput.OpenDoorWithBeep();
                         //Task cLog = Console.Out.WriteLineAsync($"Authorized: {DateTime.Now} {user[0]} {user[1]} {user[2]} {user[3]}");
                     }
@@ -135,10 +135,10 @@ namespace DoorBot
                     else
                     {
                         // Fire off the log entry and move on without waiting
-                        /*Task log =*/ _doorAuth.AddToLog(processedID, null, null, null, false);
+                        _ = _doorAuth.AddToLog(processedID, null, null, null, false);
                         _ = GpioOutput.BadBeep();
                         // Fires off an async RefreshDB
-                        _doorAuth.RefreshDB();
+                        _ = _doorAuth.RefreshDB();
                         // Timeout of 2.0s when card failed
 
                         //Task.Delay(2000);
