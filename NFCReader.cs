@@ -38,7 +38,7 @@ namespace DoorBot
 {
     public sealed class NFCReader : IDisposable
     {
-#if DEBUG
+#if Windows
         private readonly string _device = "COM3";
 #else   
         private readonly string _device = "/dev/ttyS0";

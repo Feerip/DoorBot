@@ -20,13 +20,13 @@ namespace DoorBot
 
 
 
-#if !DEBUG
+#if !Windows
         Buzzer _passiveBuzzer;
         GpioController _controller;
 #endif
         private GpioOutput()
         {
-#if !DEBUG
+#if !Windows
             _controller = new();
 
             _controller.OpenPin(BUZZER_PIN, PinMode.Output);
@@ -52,35 +52,35 @@ namespace DoorBot
 
         public void BuzzerHigh()
         {
-#if !DEBUG
+#if !Windows
             _controller.Write(BUZZER_PIN, PinValue.High);
 #endif
         }
 
         public void BuzzerLow()
         {
-#if !DEBUG
+#if !Windows
             _controller.Write(BUZZER_PIN, PinValue.Low);
 #endif
         }
 
         public void MagnetHigh()
         {
-#if !DEBUG
+#if !Windows
             _controller.Write(LOCK_SIGNAL_PIN, PinValue.High);
 #endif
         }
 
         public void MagnetLow()
         {
-#if !DEBUG
+#if !Windows
             _controller.Write(LOCK_SIGNAL_PIN, PinValue.Low);
 #endif
         }
 
         private void Beep(int milliseconds)
         {
-#if DEBUG
+#if Windows
             // Adding a runtime platform check so .Net stops complaining
             // even though I know this code will never run on anything than Windows
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
